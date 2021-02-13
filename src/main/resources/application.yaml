@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    jdbc-url: jdbc:h2:mem:ts;MVCC=TRUE;MULTI_THREADED=1;
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: sa
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+    show-sql: false
+  hibernate:
+    ddl-auto: create
+
+server:
+  port: 9907
+
+expiry:
+  flag:
+    cron: '0 0 21 ? * MON-FRI'
