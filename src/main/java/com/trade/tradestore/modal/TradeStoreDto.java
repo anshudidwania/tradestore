@@ -2,8 +2,6 @@ package com.trade.tradestore.modal;
 
 import lombok.*;
 
-import java.time.LocalDate;
-
 @Builder
 @Getter
 @Setter
