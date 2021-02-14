@@ -18,7 +18,7 @@ public class TradeStoreController {
     private TradeStoreService tradeStoreService;
 
     @PostMapping(value = "/trade-store")
-    public ResponseEntity<String> updateTradeStore(@RequestBody TradeStoreDto tradeStore) {
+    public ResponseEntity<String> updateTradeStore(@RequestBody TradeStoreDto tradeStore){
         tradeStoreService.updateTradeStore(tradeStore);
         return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
     }

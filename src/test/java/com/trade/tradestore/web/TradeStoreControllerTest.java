@@ -25,7 +25,7 @@ public class TradeStoreControllerTest {
 
 
     @Test
-    public void shouldStoreTradeSuccessfully(){
+    public void shouldStoreTradeSuccessfully() {
         when(tradeStoreService.updateTradeStore(any(TradeStoreDto.class))).thenReturn(true);
         String DATE_FORMAT = "dd/MM/yyyy";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);

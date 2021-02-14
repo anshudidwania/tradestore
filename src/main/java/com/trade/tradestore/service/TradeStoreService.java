@@ -21,13 +21,12 @@ public class TradeStoreService {
 
     private static final String DATE_FORMAT = "dd/MM/yyyy";
 
-    public Boolean updateTradeStore(TradeStoreDto tradeStore) {
+    public Boolean updateTradeStore(TradeStoreDto tradeStore){
         Optional<TradeStore> existingTs = tradeStoreRepository.findById(tradeStore.getTradeId());
         validateTrades(tradeStore, existingTs);
         tradeStore.setExpired('N');
         TradeStore store = modalMapper.map(tradeStore, TradeStore.class);
         store.setCreatedDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
-        //store.setMaturityDate(convertDate(DATE_FORMAT, tradeStore.getMaturityDate()));
         tradeStoreRepository.save(store);
         return true;
     }
