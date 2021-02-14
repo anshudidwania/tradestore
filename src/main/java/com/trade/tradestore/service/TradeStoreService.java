@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -18,11 +19,16 @@ public class TradeStoreService {
     @Autowired
     private ModelMapper modalMapper;
 
+    private static final String DATE_FORMAT = "dd/MM/yyyy";
+
     public Boolean updateTradeStore(TradeStoreDto tradeStore) {
         Optional<TradeStore> existingTs = tradeStoreRepository.findById(tradeStore.getTradeId());
         validateTrades(tradeStore, existingTs);
         tradeStore.setExpired('N');
-        tradeStoreRepository.save(modalMapper.map(tradeStore, TradeStore.class));
+        TradeStore store = modalMapper.map(tradeStore, TradeStore.class);
+        store.setCreatedDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+        //store.setMaturityDate(convertDate(DATE_FORMAT, tradeStore.getMaturityDate()));
+        tradeStoreRepository.save(store);
         return true;
     }
 
@@ -30,10 +36,15 @@ public class TradeStoreService {
         if (previousTradeStore.isPresent() && (tradeStore.getVersion() < previousTradeStore.get().getVersion())) {
             throw new TradeStoreException("Version id is less than previous version id");
         }
-        if (tradeStore.getMaturityDate().compareTo(LocalDate.now()) < 0) {
+        if (convertDate(DATE_FORMAT, tradeStore.getMaturityDate()).compareTo(LocalDate.now()) < 0) {
             throw new TradeStoreException("Maturity date cannot be less than current date");
         }
     }
+    private LocalDate convertDate(String format, String date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+        return LocalDate.parse(date, formatter);
+    }
+
 
 
 }

@@ -12,7 +12,7 @@ spring:
     ddl-auto: create
 
 server:
-  port: 9907
+  port: 8001
 
 expiry:
   flag:

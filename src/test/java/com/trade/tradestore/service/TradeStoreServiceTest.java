@@ -12,6 +12,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -28,22 +29,21 @@ public class TradeStoreServiceTest {
 
     @Test
     public void shouldUpdateTradeStoreSuccessfullyIfVersionIdIsMore() {
+        String DATE_FORMAT = "dd/MM/yyyy";
         TradeStore existingTradeStore = TradeStore.builder()
                 .tradeId("T1")
                 .bookId("b1")
                 .counterPartyId("cp1")
-                .maturityDate(LocalDate.now())
-                .createdDate(LocalDate.now())
+                .maturityDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)))
+                .createdDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)))
                 .expired('N')
                 .version(1)
                 .build();
-
         TradeStoreDto tradeStoreDto = TradeStoreDto.builder()
                 .tradeId("T1")
                 .bookId("b1")
                 .counterPartyId("cp1")
-                .maturityDate(LocalDate.now())
-                .createdDate(LocalDate.now())
+                .maturityDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)))
                 .expired('N')
                 .version(2)
                 .build();
@@ -55,40 +55,46 @@ public class TradeStoreServiceTest {
 
     @Test
     public void shouldUpdateSuccessfullyForNewTrade() {
-        TradeStore existingTradeStore = null;
-
+        String DATE_FORMAT = "dd/MM/yyyy";
+        TradeStore existingTradeStore = TradeStore.builder()
+                .tradeId("T1")
+                .bookId("b1")
+                .counterPartyId("cp1")
+                .maturityDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)))
+                .createdDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)))
+                .expired('N')
+                .version(1)
+                .build();
         TradeStoreDto tradeStoreDto = TradeStoreDto.builder()
                 .tradeId("T1")
                 .bookId("b1")
                 .counterPartyId("cp1")
-                .maturityDate(LocalDate.now())
-                .createdDate(LocalDate.now())
+                .maturityDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)))
                 .expired('N')
                 .version(2)
                 .build();
         when(tradeStoreRepository.findById(any(String.class))).thenReturn(Optional.ofNullable(existingTradeStore));
-        when(modelMapper.map(any(), any())).thenReturn(null);
+        when(modelMapper.map(any(), any())).thenReturn(existingTradeStore);
         Boolean bs = tradeStoreService.updateTradeStore(tradeStoreDto);
     }
 
     @Test
     public void shouldUpdateTradeStoreSuccessfullyIfVersionIdIsSame() {
+        String DATE_FORMAT = "dd/MM/yyyy";
         TradeStore existingTradeStore = TradeStore.builder()
                 .tradeId("T1")
                 .bookId("b1")
                 .counterPartyId("cp1")
-                .maturityDate(LocalDate.now())
-                .createdDate(LocalDate.now())
+                .maturityDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)))
+                .createdDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)))
                 .expired('N')
                 .version(1)
                 .build();
-
         TradeStoreDto tradeStoreDto = TradeStoreDto.builder()
                 .tradeId("T1")
                 .bookId("b1")
                 .counterPartyId("cp1")
-                .maturityDate(LocalDate.now())
-                .createdDate(LocalDate.now())
+                .maturityDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)))
                 .expired('N')
                 .version(1)
                 .build();
@@ -100,22 +106,21 @@ public class TradeStoreServiceTest {
 
     @Test(expected = TradeStoreException.class)
     public void shouldThrowExceptionIfVersionIdIsLess() {
+        String DATE_FORMAT = "dd/MM/yyyy";
         TradeStore existingTradeStore = TradeStore.builder()
                 .tradeId("T1")
                 .bookId("b1")
                 .counterPartyId("cp1")
-                .maturityDate(LocalDate.now())
-                .createdDate(LocalDate.now())
+                .maturityDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)))
+                .createdDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)))
                 .expired('N')
                 .version(1)
                 .build();
-
         TradeStoreDto tradeStoreDto = TradeStoreDto.builder()
                 .tradeId("T1")
                 .bookId("b1")
                 .counterPartyId("cp1")
-                .maturityDate(LocalDate.now())
-                .createdDate(LocalDate.now())
+                .maturityDate(LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)))
                 .expired('N')
                 .version(0)
                 .build();
@@ -127,13 +132,13 @@ public class TradeStoreServiceTest {
     @Test(expected = TradeStoreException.class)
     public void shouldThrowExceptionIfMaturityIsLessThanCurrentDate() {
         TradeStore existingTradeStore = null;
-
+        String DATE_FORMAT = "dd/MM/yyyy";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         TradeStoreDto tradeStoreDto = TradeStoreDto.builder()
                 .tradeId("T1")
                 .bookId("b1")
                 .counterPartyId("cp1")
-                .maturityDate(LocalDate.now().minusDays(1))
-                .createdDate(LocalDate.now())
+                .maturityDate(LocalDate.now().minusDays(1).format(formatter))
                 .expired('N')
                 .version(0)
                 .build();

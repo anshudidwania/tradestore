@@ -2,8 +2,10 @@ package com.trade.tradestore.entity;
 
 import lombok.*;
 
-import javax.persistence.*;
-import java.time.LocalDate;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "TRADE_STORE")
@@ -24,10 +26,10 @@ public class TradeStore {
     private String counterPartyId;
 
     @Column(name = "MATURITY_DATE")
-    private LocalDate maturityDate;
+    private String maturityDate;
 
     @Column(name = "CREATED_DATE")
-    private LocalDate createdDate;
+    private String createdDate;
 
     @Column(name = "EXPIRED")
     private Character expired;

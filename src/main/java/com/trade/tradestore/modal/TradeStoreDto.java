@@ -14,8 +14,7 @@ public class TradeStoreDto {
     private Integer version;
     private String counterPartyId;
     private String bookId;
-    private LocalDate maturityDate;
-    private LocalDate createdDate;
+    private String maturityDate;
     private Character expired;
 
 
